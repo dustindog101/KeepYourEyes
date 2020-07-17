@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Media;
 using System.Drawing.Drawing2D;
+using Microsoft.Win32;
 
 namespace KeepYourEyes
 {
@@ -23,6 +24,7 @@ namespace KeepYourEyes
         [STAThread]
         static void Main()
         {
+            SetStartup(true);
             const string appName = "KeepYourEyes";
             bool createdNew;
 
@@ -73,7 +75,19 @@ namespace KeepYourEyes
                 }
             }
         }
-       public static void beep()
+        private static void SetStartup(bool p)
+        {
+            string name = "KeepYourEyes";
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            if (p == true)
+                rk.SetValue(name, Application.ExecutablePath);
+            else
+                rk.DeleteValue(name, false);
+
+        }
+        public static void beep()
         {
             
             for (int i = 0; i < 5; i++)
